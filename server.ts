@@ -583,9 +583,9 @@ async function startServer() {
     }
   });
 
-  // Serve Frontend / Vite Middleware
-  if (process.env.NODE_ENV !== 'production') {
-    const { createServer: createViteServer } = await import('vite');
+  if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+    const vitePkg = 'vite';
+    const { createServer: createViteServer } = await import(vitePkg);
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa'
