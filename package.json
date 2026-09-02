@@ -2,9 +2,6 @@
   "name": "react-example",
   "private": true,
   "version": "0.0.0",
-  "engines": {
-    "node": "18.x"
-  },
   "scripts": {
     "dev": "tsx server.ts",
     "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
