@@ -1,10 +1,10 @@
 import dotenv from 'dotenv';
 dotenv.config({ override: true });
 import express from 'express';
+import cors from 'cors';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import jwt from 'jsonwebtoken';
-import { createServer as createViteServer } from 'vite';
 import { dbQuery, dbRun, getDb, saveDb } from './src/server/db.js';
 import {
   signupHandler,
@@ -40,6 +40,12 @@ function getAuthUser(req: express.Request): { userId: string; email: string; rol
 async function startServer() {
   const app = express();
   const PORT = 3000;
+
+  // Allow cross-origin requests from Firebase or other frontend hosting
+  app.use(cors({
+    origin: '*',
+    credentials: true,
+  }));
 
   app.use(express.json({ limit: '50mb' }));
   app.use(express.urlencoded({ extended: true, limit: '50mb' }));
@@ -579,6 +585,7 @@ async function startServer() {
 
   // Serve Frontend / Vite Middleware
   if (process.env.NODE_ENV !== 'production') {
+    const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa'
